@@ -1,5 +1,6 @@
 /*
- * Used to store words and their prefixes
+ * Used to store words and their prefixes 
+ * does not store any special characters
  */
 
 package DataStructures;
@@ -13,20 +14,8 @@ import java.io.*;
 public class WordTrie {
     public static void main(String[] args){
         WordTrie trie = new WordTrie();
-        try{
-            Scanner scanner = new Scanner(new File("words.txt"));
-            while(scanner.hasNext()){
-                String curWord = scanner.nextLine();
-               // System.out.println(curWord);
-                trie.addWord(curWord);
-            }
-            
+            trie.addWordFile("words.txt");
             trie.printAllWords();
-            
-        } catch (FileNotFoundException ex){
-            System.out.println("Not able to find file");
-        }
-        
     }
     
     //Define global variables
@@ -36,6 +25,19 @@ public class WordTrie {
     public WordTrie(){
         this.numOfWords = 0;
         this.head = new Node('*');
+    }
+    
+    public void addWordFile(String fileLocation){
+        try{
+            Scanner scanner = new Scanner(new File(fileLocation));
+                while(scanner.hasNext()){
+                    String curWord = scanner.nextLine();
+                    this.addWord(curWord);
+                }
+        } catch(FileNotFoundException ex){
+            //todo handle exception
+            System.out.println("File not found");
+        }
     }
     
     /*
@@ -102,7 +104,7 @@ public class WordTrie {
         
         while(curLetter <= 'z'){
             if(curNode.hasChild(curLetter)){
-                StringBuffer temp = new StringBuffer(prefix + ""+ curLetter);
+                StringBuffer temp = new StringBuffer(prefix + "" + curLetter);
                 depthPrinter(temp, curNode.getChild(curLetter), 'a' );
             }
             curLetter++;
